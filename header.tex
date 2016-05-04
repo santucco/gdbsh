@@ -1,0 +1,99 @@
+%\font\tfont="CMU Serif" at 12pt \tfont
+\font\tenrm="CMU Serif" at 10pt \tenrm
+\font\ninerm="CMU Serif" at 9pt \ninerm
+\font\eightrm="CMU Serif" at 8pt \eightrm 
+\font\sevenrm="CMU Serif" at 7pt \sevenrm
+\font\sixrm="CMU Serif" at 6pt \sixrm
+\font\tentex="CMU Serif" at 10pt \tentex
+\font\tenbf="CMU Serif-Bold" at 10pt \tenbf 
+\font\tenit="CMU Serif-Italic" at 10pt \tenit 
+\font\titlefont="CMU Serif" at 7pt   \titlefont 
+\font\ttitlefont="CMU Serif" at 10pt  \ttitlefont
+
+\def\As{\note{Также смотри секции}} % xref for multiply defined section name
+\def\U{\note{Используется в секции}} % xref for use of a section
+\def\Us{\note{Используется в секциях}} % xref for uses of a section
+\def\A{\note{Также смотри секцию}} % xref for doubly defined section name
+\def\ET{ и~} % conjunction between two section numbers
+\def\ETs{, и~} % conjunction between the last two of several section numbers
+\def\fin{\par\vfill\eject % this is done when we are ending the index
+  \ifpagesaved\null\vfill\eject\fi % output a null index column
+  \if L\lr\else\null\vfill\eject\fi % finish the current page
+  \parfillskip 0pt plus 1fil
+  \def\grouptitle{НАЗВАНИЯ СЕКЦИЙ}
+  \let\topsecno=\nullsec
+  \message{Названия секций:}
+  \output={\normaloutput\page\lheader\rheader}
+  \setpage
+  \def\note##1##2.{\quad{\eightrm##1~\ifacro{\pdfnote##2.}\else{##2}\fi.}}
+  \def\Q{\note{Расположено в секции}} % crossref for mention of a section
+  \def\Qs{\note{Расположено в секциях}} % crossref for mentions of a section
+  \def\U{\note{Используется в секции}} % crossref for use of a section
+  \def\Us{\note{Используется в секциях}} % crossref for uses of a section
+  \def\I{\par\hangindent 2em}\let\*=*
+  \def\outsecname{Названия секций}
+  \ifacro \let\Xpdf\X
+  \ifpdftex \makebookmarks \pdfdest name {NOS} fitb
+    \pdfoutline goto name {NOS} count -\secno {\outsecname}
+    \def\X##1:##2\X{\Xpdf##1:##2\X \firstsecno##1.%
+      {\toksF={}\makeoutlinetoks##2\outlinedone\outlinedone}%
+      \pdfoutline goto num \the\toksA \expandafter{\the\toksE}}
+  \else\ifpdf
+    \special{pdf: outline -1 << /Title (\outsecname)
+      /Dest [ @thispage /FitH @ypos ] >>}
+    \def\X##1:##2\X{\Xpdf##1:##2\X \firstsecno##1.%
+      {\toksF={}\makeoutlinetoks##2\outlinedone\outlinedone}%
+      \special{pdf: outline 0 << /Title (\the\toksE)
+        /A << /S /GoTo /D (\romannumeral\the\toksA) >> >>}}
+  \fi\fi\fi
+  \readsections}
+
+
+\font\authorfont=cmr12
+\pageno=0 \titletrue\eject
+\null\vfill
+\centerline{\stitle}
+\vskip 10pt\centerline{(version \ver)}
+\vskip 24pt
+\centerline{\authorfont Alexander Sychev (santucco@gmail.com)}
+\vfill
+
+\def\title{\sname (version \ver)}
+\def\topofcontents{\null\vfill
+	\centerline{\stitle}
+	\vskip 15pt
+	\centerline{(version \ver)}
+	\vfill}
+\def\botofcontents{\vfill
+\noindent
+Copyright \copyright\ 2015, 2016 Alexander Sychev. All rights reserved.
+\bigskip\noindent
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+\yskip\item{$\bullet$}Redistributions of source code must retain the 
+above copyright
+notice, this list of conditions and the following disclaimer.
+\yskip\item{$\bullet$}Redistributions in binary form must reproduce the above
+copyright notice, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the
+distribution.
+\yskip\item{$\bullet$}The name of author may not be used to endorse 
+or promote products derived from
+this software without specific prior written permission.
+
+\bigskip\noindent
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+}
+
+\pageno=\contentspagenumber \advance\pageno by 1
