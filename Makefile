@@ -55,10 +55,11 @@ all: $(TARGETS)
 
 gdbsh: gdbsh.go common/common.go
 	go build $(gcflags)
-	@echo done
+	@echo $ @done
 
 mfind/mfind: mfind/mfind.go common/common.go
 	(cd mfind; go build  $(gcflags))
+	@echo $ @done
 
 mfind/mfind.go: mfind.w
 	-mkdir -p mfind
@@ -66,6 +67,7 @@ mfind/mfind.go: mfind.w
 
 findref/findref: findref/findref.go common/common.go
 	(cd findref; go build  $(gcflags))
+	@echo $ @done
 
 findref/findref.go: findref.w
 	-mkdir -p findref
@@ -73,6 +75,7 @@ findref/findref.go: findref.w
 
 common: common/common.go
 	(cd common; go build  $(gcflags))
+	@echo $ @done
 
 common/common.go: common.w
 	-mkdir -p common

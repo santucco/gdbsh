@@ -50,6 +50,7 @@ import(
 
 "fmt"
 "strings"
+"flag"
 
 
 
@@ -60,7 +61,7 @@ import(
 /*6:*/
 
 
-//line mfind.w:86
+//line mfind.w:102
 
 "bitbucket.org/santucco/gdbsh/common"
 
@@ -73,7 +74,7 @@ import(
 /*10:*/
 
 
-//line mfind.w:124
+//line mfind.w:139
 
 "io"
 
@@ -95,10 +96,13 @@ var(
 /*4:*/
 
 
-//line mfind.w:51
+//line mfind.w:52
 
 options string
-values string
+values[]string
+help bool
+size string
+num uint
 
 
 
@@ -109,7 +113,7 @@ values string
 /*7:*/
 
 
-//line mfind.w:90
+//line mfind.w:106
 
 sections[]string
 
@@ -120,7 +124,7 @@ sections[]string
 
 //line mfind.w:27
 
-debug glog.Level= 0
+debug glog.Level= 1
 )
 
 func main(){
@@ -132,34 +136,46 @@ defer glog.V(debug).Infoln("main is done")
 /*5:*/
 
 
-//line mfind.w:56
+//line mfind.w:60
 
 {
-if len(os.Args)==2&&strings.TrimSpace(os.Args[1])=="-h"{
+flag.BoolVar(&help,"help",false,"print the help")
+flag.StringVar(&size,"size","","search query size: b (bytes), h (halfwords - two bytes), w (words - four bytes), g (giant words - eight bytes)")
+flag.UintVar(&num,"number",0,"maximum number of finds (default all)")
+flag.Usage= func(){
 fmt.Fprint(os.Stderr,
-"mfind 0.3, GDB extention command for using from GDBSh\n",
+"mfind 0.31, GDB extention command for using from GDBSh\n",
 "Copyright (C) 2015, 2016 Alexander Sychev\n",
-"Usage:\n\tmfind [/SN] VAL1,VAL2 [VAL2_1,VAL2_2 ...]\n",
-"Search memory for the sequence of bytes specified by VAL1, VAL2, etc\n",
-"\tS, search query size:\n",
-"\t'b'\n",
-"\t\tbytes\n",
-"\t'h'\n",
-"\t\thalfwords (two bytes)\n",
-"\t'w'\n",
-"\t\twords (four bytes)\n",
-"\t'g'\n",
-"\t\tgiant words (eight bytes)\n",
-"\tN, maximum number of finds (default all)\n")
+"Search memory for the sequences of bytes\n",
+"Usage:\n\tmfind [options] <sequence1> [<sequence2>...]\n",
+"Options:\n")
+flag.PrintDefaults()
+}
+flag.Parse()
+if help{
+flag.Usage()
 return
 }
-for i:=1;i<len(os.Args);i++{
-if os.Args[i][0]=='/'{
-options+= os.Args[i]
-}else{
-values+= " "+os.Args[i]
+if len(size)!=0{
+if len(size)> 1{
+fmt.Fprint(os.Stderr,"wrong search query size: %s",size)
+flag.Usage()
+return
+}
+switch size[0]{
+case'b','h','w','g':
+options+= "/"+size
+default:
+fmt.Fprint(os.Stderr,"wrong search query size: %s",size)
+flag.Usage()
+return
 }
 }
+if num!=0{
+options+= fmt.Sprintf(" /%d",num)
+}
+values= flag.Args()
+
 }
 
 
@@ -179,7 +195,7 @@ defer os.Stdout.Close()
 /*8:*/
 
 
-//line mfind.w:94
+//line mfind.w:110
 
 {
 var err error
@@ -202,19 +218,18 @@ return
 /*9:*/
 
 
-//line mfind.w:105
+//line mfind.w:121
 
 {
 glog.V(debug).Infof("%#v",sections)
-vl:=strings.Fields(values)
-if len(vl)!=0{
-for _,val:=range vl{
+if len(values)!=0{
+for _,val:=range values{
 
 
 /*11:*/
 
 
-//line mfind.w:128
+//line mfind.w:143
 
 {
 v:=fmt.Sprintf("%s:\n",val)
@@ -241,7 +256,7 @@ v= ""
 /*:11*/
 
 
-//line mfind.w:111
+//line mfind.w:126
 
 }
 }else{
@@ -253,7 +268,7 @@ val= strings.TrimSpace(val)
 /*11:*/
 
 
-//line mfind.w:128
+//line mfind.w:143
 
 {
 v:=fmt.Sprintf("%s:\n",val)
@@ -280,7 +295,7 @@ v= ""
 /*:11*/
 
 
-//line mfind.w:117
+//line mfind.w:132
 
 }
 }

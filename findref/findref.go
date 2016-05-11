@@ -50,6 +50,7 @@ import(
 
 "fmt"
 "strings"
+"flag"
 
 
 
@@ -60,7 +61,7 @@ import(
 /*6:*/
 
 
-//line findref.w:70
+//line findref.w:82
 
 "bitbucket.org/santucco/gdbsh/common"
 
@@ -73,7 +74,7 @@ import(
 /*10:*/
 
 
-//line findref.w:108
+//line findref.w:120
 
 "io"
 
@@ -86,7 +87,7 @@ import(
 /*14:*/
 
 
-//line findref.w:148
+//line findref.w:160
 
 "strconv"
 
@@ -108,9 +109,11 @@ var(
 /*4:*/
 
 
-//line findref.w:50
+//line findref.w:51
 
 instances[]string
+offset uint
+help bool
 
 
 
@@ -121,7 +124,7 @@ instances[]string
 /*7:*/
 
 
-//line findref.w:74
+//line findref.w:86
 
 sections[]string
 
@@ -134,7 +137,7 @@ sections[]string
 /*11:*/
 
 
-//line findref.w:112
+//line findref.w:124
 
 vtables[]string
 
@@ -145,7 +148,7 @@ vtables[]string
 
 //line findref.w:27
 
-debug glog.Level= 0
+debug glog.Level= 1
 )
 
 func main(){
@@ -157,19 +160,28 @@ defer glog.V(debug).Infoln("main is done")
 /*5:*/
 
 
-//line findref.w:54
+//line findref.w:57
 
 {
-if len(os.Args)==2&&strings.TrimSpace(os.Args[1])=="-h"{
+flag.BoolVar(&help,"help",false,"print the help")
+flag.UintVar(&offset,"offset",160,"a size of offset backward for analysing")
+flag.Usage= func(){
 fmt.Fprint(os.Stderr,
-"findref 0.3, GDB extention command for using from GDBSh\n",
+"findref 0.31, GDB extention command for using from GDBSh\n",
 "Copyright (C) 2015, 2016 Alexander Sychev\n",
-"Usage:\n\tfindref <instance1> [<instance2>...]\n",
-"Search for instances of objects potentially have a reference to the specified instances\n")
+"Search for instances of virtual objects potentially have a reference to the specified instances\n",
+"Usage:\n\tfindref [options] <instance1> [<instance2>...]\n",
+"Options:\n")
+flag.PrintDefaults()
+}
+flag.Parse()
+if help{
+flag.Usage()
 return
 }
-if len(os.Args)> 1{
-instances= os.Args[1:]
+glog.V(debug).Infof("args: %#v",flag.Args())
+if len(flag.Args())> 0{
+instances= flag.Args()
 }
 }
 
@@ -189,7 +201,7 @@ defer gdbout.Close()
 /*8:*/
 
 
-//line findref.w:78
+//line findref.w:90
 
 {
 var err error
@@ -213,7 +225,7 @@ return
 /*9:*/
 
 
-//line findref.w:90
+//line findref.w:102
 
 {
 glog.V(debug).Infof("instances: %#v",instances)
@@ -224,7 +236,7 @@ for _,val:=range instances{
 /*12:*/
 
 
-//line findref.w:116
+//line findref.w:128
 
 {
 vtables,err:=common.Vtables(gdbin,gdbout,val)
@@ -239,7 +251,7 @@ rl:=make(map[string][]string)
 /*13:*/
 
 
-//line findref.w:131
+//line findref.w:143
 
 {
 for _,v:=range vtables{
@@ -261,14 +273,14 @@ glog.V(debug).Infof("addresses: %#v",rl)
 /*:13*/
 
 
-//line findref.w:125
+//line findref.w:137
 
 
 
 /*15:*/
 
 
-//line findref.w:152
+//line findref.w:164
 
 {
 cmds:=make(map[string]map[int64][]string)
@@ -277,7 +289,7 @@ cmds:=make(map[string]map[int64][]string)
 /*16:*/
 
 
-//line findref.w:161
+//line findref.w:173
 
 {
 rp:=strings.NewReplacer("\\n","","\\t","","\\\"","\"")
@@ -288,7 +300,7 @@ adr,err:=strconv.ParseInt(a,0,64)
 if err!=nil{
 continue
 }
-for i:=adr;i> adr-160;i-= 8{
+for i:=adr;i> adr-int64(offset);i-= 8{
 o,r,err:=common.RunCommand(gdbin,gdbout,fmt.Sprintf("-data-read-memory-bytes 0x%x 8",i))
 if err!=nil{
 continue
@@ -351,14 +363,14 @@ cmds[address][i]= append(cmds[address][i],fmt.Sprintf("p *(%s*)0x%x\n",sym[11:],
 /*:16*/
 
 
-//line findref.w:155
+//line findref.w:167
 
 
 
 /*17:*/
 
 
-//line findref.w:230
+//line findref.w:242
 
 {
 rp:=strings.NewReplacer("\\n","\n","\\t","\t","\\\"","\"")
@@ -404,7 +416,7 @@ return
 /*:17*/
 
 
-//line findref.w:156
+//line findref.w:168
 
 }
 
@@ -414,7 +426,7 @@ return
 /*:15*/
 
 
-//line findref.w:126
+//line findref.w:138
 
 
 }
@@ -424,7 +436,7 @@ return
 /*:12*/
 
 
-//line findref.w:95
+//line findref.w:107
 
 }
 }else{
@@ -436,7 +448,7 @@ val= strings.TrimSpace(val)
 /*12:*/
 
 
-//line findref.w:116
+//line findref.w:128
 
 {
 vtables,err:=common.Vtables(gdbin,gdbout,val)
@@ -451,7 +463,7 @@ rl:=make(map[string][]string)
 /*13:*/
 
 
-//line findref.w:131
+//line findref.w:143
 
 {
 for _,v:=range vtables{
@@ -473,14 +485,14 @@ glog.V(debug).Infof("addresses: %#v",rl)
 /*:13*/
 
 
-//line findref.w:125
+//line findref.w:137
 
 
 
 /*15:*/
 
 
-//line findref.w:152
+//line findref.w:164
 
 {
 cmds:=make(map[string]map[int64][]string)
@@ -489,7 +501,7 @@ cmds:=make(map[string]map[int64][]string)
 /*16:*/
 
 
-//line findref.w:161
+//line findref.w:173
 
 {
 rp:=strings.NewReplacer("\\n","","\\t","","\\\"","\"")
@@ -500,7 +512,7 @@ adr,err:=strconv.ParseInt(a,0,64)
 if err!=nil{
 continue
 }
-for i:=adr;i> adr-160;i-= 8{
+for i:=adr;i> adr-int64(offset);i-= 8{
 o,r,err:=common.RunCommand(gdbin,gdbout,fmt.Sprintf("-data-read-memory-bytes 0x%x 8",i))
 if err!=nil{
 continue
@@ -563,14 +575,14 @@ cmds[address][i]= append(cmds[address][i],fmt.Sprintf("p *(%s*)0x%x\n",sym[11:],
 /*:16*/
 
 
-//line findref.w:155
+//line findref.w:167
 
 
 
 /*17:*/
 
 
-//line findref.w:230
+//line findref.w:242
 
 {
 rp:=strings.NewReplacer("\\n","\n","\\t","\t","\\\"","\"")
@@ -616,7 +628,7 @@ return
 /*:17*/
 
 
-//line findref.w:156
+//line findref.w:168
 
 }
 
@@ -626,7 +638,7 @@ return
 /*:15*/
 
 
-//line findref.w:126
+//line findref.w:138
 
 
 }
@@ -636,7 +648,7 @@ return
 /*:12*/
 
 
-//line findref.w:101
+//line findref.w:113
 
 }
 }

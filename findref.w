@@ -1,4 +1,4 @@
-\def\ver{0.3}
+\def\ver{0.31}
 \def\sname{FindRef}
 \def\stitle{\titlefont \ttitlefont{\sname} - команда \ttitlefont{GDBSh} для поиска ссылок на объекты}
 \input header
@@ -6,7 +6,7 @@
 @** Введение.
 
 Команда \.{FindRef} создана как команда расширения функционала \.{GDB} для через \.{GDBSh}.
-Она ищет объекты, предположительно содержащие в своих членах-данных указатель на указанный экземпляр класса с виртуальной таблицей. 
+Она ищет объекты, предположительно содержащие в своих членах-данных указатель на указанный экземпляр класса с виртуальной таблицей.
 
 
 @** Реализация.
@@ -25,7 +25,7 @@ import (
 
 var (
 	@<Глобальные переменные@>
-	debug glog.Level=0
+	debug glog.Level=1
 )@#
 
 func main() {
@@ -45,24 +45,36 @@ func main() {
 @<Импортируемые пакеты@>=
 "fmt"
 "strings"
+"flag"
 
 @
 @<Глобальные переменные@>=
 instances	[]string
+offset		uint
+help		bool
 
 @
 @<Обработать аргументы командной строки@>=
 {
-	if len(os.Args)==2 && strings.TrimSpace(os.Args[1])=="-h" {
+	flag.BoolVar(&help, "help", false, "print the help")
+	flag.UintVar(&offset, "offset", 160, "a size of offset backward for analysing")
+	flag.Usage = func() {
 		fmt.Fprint(os.Stderr,
-			"findref 0.3, GDB extention command for using from GDBSh\n",
+			"findref 0.31, GDB extention command for using from GDBSh\n",
 			"Copyright (C) 2015, 2016 Alexander Sychev\n",
-			"Usage:\n\tfindref <instance1> [<instance2>...]\n",
-			"Search for instances of objects potentially have a reference to the specified instances\n")
+			"Search for instances of virtual objects potentially have a reference to the specified instances\n",
+			"Usage:\n\tfindref [options] <instance1> [<instance2>...]\n",
+			"Options:\n")
+		flag.PrintDefaults()
+	}
+	flag.Parse()
+	if help {
+		flag.Usage()
 		return
 	}
-	if len(os.Args)>1 {
-		instances=os.Args[1:]
+	glog.V(debug).Infof("args: %#v", flag.Args())
+	if len(flag.Args())>0 {
+		instances=flag.Args()
 	}
 }
 
@@ -101,7 +113,7 @@ sections	[]string
 			@<Искать указатели на виртуальные таблицы для |val| во всех секциях@>
 		}
 	}
-	
+
 }
 
 @
@@ -150,7 +162,7 @@ vtables	[]string
 
 @
 @<Посмотреть ближайщее окружение найденных адресов@>=
-{	
+{
 	cmds:=make(map[string]map[int64][]string)
 	@<Для всех адресов просмотреть предыдущие адреса на наличие ссылок на виртуальные таблицы, создать команды распечатки содержимого по найденным адресам, преобразованным к реализации@>
 	@<Выполнить сформированные команды@>
@@ -168,7 +180,7 @@ vtables	[]string
 			if err!=nil {
 				continue
 			}
-			for i:=adr; i>adr-160; i-=8 {
+			for i:=adr; i>adr-int64(offset); i-=8 {
 				o, r, err:=common.RunCommand(gdbin, gdbout, fmt.Sprintf("-data-read-memory-bytes 0x%x 8", i))
 				if err!=nil {
 					continue
@@ -230,7 +242,7 @@ vtables	[]string
 @<Выполнить сформированные команды@>=
 {
 	rp:=strings.NewReplacer("\\n", "\n", "\\t", "\t", "\\\"", "\"")
-	
+
 	for a, v:=range cmds {
 		for aa, c:=range v {
 			o, _, err:=common.RunCommand(gdbin, gdbout, c[0])
@@ -245,7 +257,7 @@ vtables	[]string
 					glog.V(debug).Infof("%s has been found in '%s'", adr, s)
 					f=true
 					break
-				}	
+				}
 			}
 			if !f {
 				continue

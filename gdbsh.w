@@ -1,4 +1,4 @@
-\def\ver{0.3}
+\def\ver{0.31}
 \def\sname{GDBSh}
 \def\stitle{\titlefont \ttitlefont{\sname} - командная оболочка для \ttitlefont{GDB}}
 \input header
@@ -6,7 +6,7 @@
 
 Отладчик \.{GDB} не имеет некоторых команд, нужных в повседневном использовании, например поиска адресов по памяти процесса. Да, есть команда \.{find},
 позволяющая искать в регионе памяти, но процесс занимает не сплошной кусок памяти, a множество отдельных секций, сканировать в каждой из которых нужно отдельно.
-В принципе, \.{GDB} можно расширить с помощью скриптов на \.{Python}, но эти скриптовые возможности ограничены. 
+В принципе, \.{GDB} можно расширить с помощью скриптов на \.{Python}, но эти скриптовые возможности ограничены.
 Так возникла идея использовать механизм \.{GDB/MI} для запуска в \.{GDB} внешних команд.
 Впоследствии захотелось выстраивать команды в конвейер, так получился \.{GDBSh}
 
@@ -56,7 +56,7 @@ gdbout	io.ReadCloser
 gdberr	io.ReadCloser
 cmd		*exec.Cmd
 
-@ Аргументы командной строки дополняются опцией для вызова интерпретатора \.{GDB} 
+@ Аргументы командной строки дополняются опцией для вызова интерпретатора \.{GDB}
 @<Подготовить аргументы командной строки...@>=
 var args []string
 args=append(args, os.Args...)
@@ -77,19 +77,19 @@ args[0]="--interpreter=mi"
 		return
 	}
 	defer gdbin.Close()
-	
+
 	if gdbout, err=cmd.StdoutPipe(); err!=nil {
 		glog.Errorf("can't create pipe: %v\n", err)
 		return
 	}
 	defer gdbout.Close()
-	
+
 	if gdberr, err=cmd.StderrPipe(); err!=nil {
 		glog.Errorf("can't create pipe: %v\n", err)
 		return
 	}
 	defer gdberr.Close()
-	
+
 	if err=cmd.Start(); err!=nil {
 		glog.Errorf("can't start gdb: %v\n", err)
 		return
@@ -203,12 +203,12 @@ ackch		=make(chan bool)
 		glog.V(debug).Infof("writing to process %d': %s'", p, s)
 		if n, err:=io.WriteString(file, s); err!=nil || n!=len(s) {
 			glog.V(debug).Infof("can't write '%s' to output, %d bytes has been written: %s", s, n, err)
-		}		
+		}
 		file=os.Stdout
 		glog.Flush()
 		@<Разрешение выполнения следующей команды@>
 		continue
-	} 
+	}
 	if strings.HasPrefix(s, "*stopped") {
 		@<Разрешить ввод@>
 	}
@@ -219,7 +219,7 @@ ackch		=make(chan bool)
 		file=devnull
 	}
 
-}	
+}
 
 @
 @<Обработать строки для вывода в |os.Stdout|@>=
@@ -248,7 +248,7 @@ ackch		=make(chan bool)
 				case '(':
 					if strings.HasPrefix(s, "(gdb)") {
 						@<Однократно выполнить операции инициализации при загруженном \.{GDB}@>
-					}			
+					}
 					continue
 			case '*':
 				continue
@@ -270,16 +270,16 @@ go func(){
 	close(fromgdbch)
 }()
 
-@ Пакет |readline| осуществляет поддержку получения ввода с клавиатуры, историю и автозавершение команд. 
+@ Пакет |readline| осуществляет поддержку получения ввода с клавиатуры, историю и автозавершение команд.
 Если введенная команда пустая, используется предыдущая команда, хранящаяся в |prev|
 @<Запустить параллельную обработку ввода из |stdin|@>=
 go func (){
 	prev:=""
-	@<Захватить ввод@> 
+	@<Захватить ввод@>
 	@<Создать экземпляр |readline| @>
 	for	{
 		s, err:=rl.Readline()
-		@<Разрешить ввод@> 
+		@<Разрешить ввод@>
         if err!=nil { // io.EOF
                 break
         }
@@ -291,9 +291,9 @@ go func (){
 		@<Запуск команд с выводом в |stdout|@>
 		prev=s
 		rl.SetPrompt("gdbsh$ ")
-		@<Захватить ввод@> 
+		@<Захватить ввод@>
 	}
-	glog.Infof("on exit")
+	glog.V(debug).Infof("on exit")
 	togdbch<-"-gdb-exit"
 } ()
 
@@ -303,7 +303,7 @@ go func (){
 cmds=map[string]string {
 	@<Зарезервированные команды \.{GDB}@>
 	@<Дополнительные встроенные команды@>
-} 
+}
 
 @ Запускаем конвейер команд, начиная с последней, затем ждем окончания всех команд и отправляем запросы на удаление из списка процессоров
 @<Запуск команд с выводом в |stdout|@>=
@@ -321,7 +321,7 @@ cmds=map[string]string {
 	for _, cmd:=range cnv {
 		if v, ok:=cmd.(*exec.Cmd); ok {
 			glog.V(debug).Infof("waiting for process %s with pid %d is finished", v.Path, v.Process.Pid)
-		} 
+		}
 		@<Ждать завершения процесса@>
 		if v, ok:=cmd.(*exec.Cmd); ok {
 			glog.V(debug).Infof("process %s with pid %d has finished", v.Path, v.Process.Pid)
@@ -334,7 +334,7 @@ cmds=map[string]string {
 @<Типы@>=
 Cmd interface {
 	Start() error
-	Wait() error	
+	Wait() error
 }
 
 @
@@ -348,7 +348,7 @@ Cmd interface {
 }
 
 @ Надо разделить команду на поля, взять первое и поискать его в |cmds|. Если команда не найдется, надо поискать путь до нее в |\$PATH|.
-Если команда найдется с непустым путем или не найдется, ее нужно запустить как внешнюю команду. 
+Если команда найдется с непустым путем или не найдется, ее нужно запустить как внешнюю команду.
 @<Определить запускаемую команду и создать |cmd|@>=
 {
 	n:=strings.TrimSpace(c)
@@ -364,15 +364,18 @@ Cmd interface {
 
 @
 @<Создать внешний процесс@>=
+{
 	var ar []string
+	c=strings.Replace(c, "$", "\\$", -1)
 	ar=append(ar, "sh", "-c", c)
-	glog.Infof("ar: %#v", ar)
+	glog.V(debug).Infof("command arguments: %#v", ar)
 	c:=exec.Command("/usr/bin/env", ar...)
 	if c==nil {
 		glog.Errorf("can't create command to run %s\n", n)
 		break
 	}
 	cmd=c
+}
 
 
 @ Определим расширенную функцию разбиения на поля с учетом экранирования символов и неделимых строковых аргументов
@@ -392,7 +395,7 @@ func FieldsFunc(s string, f func(rune) bool) []string {
 		if r=='\'' && !escaped {
 			openeds=!openeds
 		}
-		
+
 		if r=='"' && !escaped {
 			openedd=!openedd
 		}
@@ -402,7 +405,7 @@ func FieldsFunc(s string, f func(rune) bool) []string {
 	return strings.FieldsFunc(s, ff)
 }
 
-@ Инициализируем |c.Stdout| предыдущим значением |stdout|. Если это не первая команда конвейера, то создаем канал для |c.Stdin|, по которому команда будет получать данные. Второй конец нового канала сохраняется в |stdout|  
+@ Инициализируем |c.Stdout| предыдущим значением |stdout|. Если это не первая команда конвейера, то создаем канал для |c.Stdin|, по которому команда будет получать данные. Второй конец нового канала сохраняется в |stdout|
 @<Заполнить |c.Stdin| и |c.Stdout| и сохранить в |stdout| второй конец канала@>=
 {
 	c.Stdout=stdout
@@ -422,7 +425,7 @@ func FieldsFunc(s string, f func(rune) bool) []string {
 @ Если запускается конвейер, создаем для запускаемого процесса канал для связи с процессом - источником данных.
 Также создаем два канала для взаимодействия процесса с \.{GDB} через \.{GDB/MI}.
 Так как после запуска процесса дублирующие дескрипторы каналов должны быть закрыты, добавляем каналы в |toclose|
-Канал |stdout| может быть каналом в памяти для обмена данными с внутренней командой, в этом случае его не нужно закрывать 
+Канал |stdout| может быть каналом в памяти для обмена данными с внутренней командой, в этом случае его не нужно закрывать
 @<Заполнить у |c| стандартные дескрипторы и два дополнительных для взаимодействия с \.{GDB}@>=
 {
 	@<Заполнить |c.Stdin| и |c.Stdout| и сохранить в |stdout| второй конец канала@>
@@ -438,11 +441,11 @@ func FieldsFunc(s string, f func(rune) bool) []string {
 	if r, fromgdb, err=os.Pipe(); err!=nil {
 		glog.Errorf("can't create pipe: %v\n", err)
 		break
-	} 
+	}
 	if togdb, w, err=os.Pipe(); err!=nil {
 		glog.Errorf("can't create pipe: %v\n", err)
 		break
-	} 
+	}
 	c.ExtraFiles = append(c.ExtraFiles, r, w)
 	toclose=append(toclose, r, w)
 }
@@ -454,7 +457,7 @@ func FieldsFunc(s string, f func(rune) bool) []string {
 	case *exec.Cmd:
 		@<Заполнить у |c| стандартные дескрипторы и два дополнительных для взаимодействия с \.{GDB}@>
 	case *internal:
-		@<Заполняем дескрипторы внутренней команды@>	
+		@<Заполняем дескрипторы внутренней команды@>
 	}
 
 	if err:=cmd.Start(); err!=nil {
@@ -462,9 +465,9 @@ func FieldsFunc(s string, f func(rune) bool) []string {
 		break
 	}
 	@<Закрыть переданные дескрипторы@>
-		
+
 	go func() {
-		var pid int	
+		var pid int
 		if v, ok:=cmd.(*exec.Cmd); ok {
 			pid=v.Process.Pid
 		} else {
@@ -478,7 +481,7 @@ func FieldsFunc(s string, f func(rune) bool) []string {
 		}
 		glog.V(debug).Infof("end of input for pid %d", pid)
 		togdb.Close()
-		fromgdb.Close()	
+		fromgdb.Close()
 	} ()
 	cnv=append(cnv, cmd)
 }
@@ -519,13 +522,13 @@ func FieldsFunc(s string, f func(rune) bool) []string {
 					togdbch<-"-exec-interrupt"
 				default:
 					glog.V(debug).Infof("signal %#v", s)
-			} 
+			}
 		}
 	} ()
-	
+
 }
 
-@ Если в качестве внутренней команды используется |args|, то читаем их |stdin| аргументы для идущей за |args| внутренней команды и запускаем внутреннюю команду с каждым считанным из |stdin| набором аргументов 
+@ Если в качестве внутренней команды используется |args|, то читаем их |stdin| аргументы для идущей за |args| внутренней команды и запускаем внутреннюю команду с каждым считанным из |stdin| набором аргументов
 
 @
 @<Типы@>=
@@ -579,7 +582,7 @@ func (this *internal)Wait() error {
 	return nil
 }
 
-@ Заполням поля внутренней команды. 
+@ Заполням поля внутренней команды.
 @<Создать внутреннюю команду@>=
 	var ci internal
 	ci.wait=make(chan bool)
@@ -587,7 +590,7 @@ func (this *internal)Wait() error {
 	cmd=&ci
 
 
-@ Для |togdb| и |fromgdb| используем каналы в памяти. 
+@ Для |togdb| и |fromgdb| используем каналы в памяти.
 |stdin| и |stdout| могут наполняться из внешних процессов, поэтому для них используются обычные каналы
 @<Заполняем дескрипторы внутренней команды@>=
 {
@@ -608,14 +611,14 @@ func (this *internal)Wait() error {
 		gdbr:=bufio.NewReader(this.gdbin)
 		rp:=strings.NewReplacer("\\n", "\n", "\\t", "\t", "\\\"", "\"")
 		quit:=false
-		
+
 		for s, err:=gdbr.ReadString('\n'); err==nil; s, err=gdbr.ReadString('\n') {
 			glog.V(debug).Infof("sending: '%s'", s)
-			
+
 			if len(s) == 0 {
 				continue
 			}
-			print:=true			
+			print:=true
 			switch s[0]{
 				case '~':
 					s=s[2:len(s)-2]
@@ -632,7 +635,7 @@ func (this *internal)Wait() error {
 						if ok && len(v)!=0 && v[0].Name=="msg" {
 							s=fmt.Sprintf("%s\n", v[0].Val.(string))
 							print=true
-						} 
+						}
 					} else if strings.HasPrefix(s, "^done") {
 						s=s[5:]
 						if len(s)==0 || s[0]!=',' {
@@ -682,7 +685,7 @@ func (this *internal)Wait() error {
 
 @
 @<Глобальные переменные@>=
-debug glog.Level=0
+debug glog.Level=1
 
 @
 @<Подготовить трассировку@>=
@@ -752,7 +755,7 @@ glog.V(debug).Infof("an execution of a next command is allowed")
 @<Проверить аргументы командной строки, вывести информацию о программе, если необходимо@>=
 {
 	if len(os.Args)>1 && strings.TrimSpace(os.Args[1])=="-h" {
-		fmt.Fprint(os.Stdout, "GDBSh 0.3, a shell for GDB\n",
+		fmt.Fprint(os.Stdout, "GDBSh 0.31, a shell for GDB\n",
 			"Copyright (C) 2015, 2016 Alexander Sychev\n",
 			"Usage:\n",
 			"\tgdbsh <GDB options>\n",
@@ -786,9 +789,9 @@ rl *readline.Instance
 		panic(err)
 	}
 	defer rl.Close()
-	
+
 @ С помощью рекурсивной функции |makePcItems| полученный список команд с подкомандами преобразуется в |readline.PrefixCompilerInterface|
-Рекурсия нужна, чтобы сгруппировать подкоманды для одной команды в один |readline.PcItem|. Команда |"help"| игнорируется, поскольку она добавляется отдельно с 
+Рекурсия нужна, чтобы сгруппировать подкоманды для одной команды в один |readline.PcItem|. Команда |"help"| игнорируется, поскольку она добавляется отдельно с
 возможностью автозаполнения всеми остальными командами.
 @c
 func makePcItems (o [][]string, i int) (res []readline.PrefixCompleterInterface) {
@@ -828,16 +831,16 @@ func makePcItems (o [][]string, i int) (res []readline.PrefixCompleterInterface)
 @<Импортируемые пакеты@>=
 "sort"
 
-@ Получим скисок всех команд с помощью команды |"help all"|. Для этого запустим команду, а в качестве канала для вывода будем использовать канал в памяти, 
+@ Получим скисок всех команд с помощью команды |"help all"|. Для этого запустим команду, а в качестве канала для вывода будем использовать канал в памяти,
 из которого в отдельном потоке будет вычитываться весь вывод запущеной команды, фильтроваться и добавляться в массив строк. К сожалению, из-за ошибок в \.{GDB},
-команды не всегда упорядочены, поэтому их приходится дополнительно отсортировать. Затем полученные команды разбиваюися на подкоманды для дальнейшей обработки. 
+команды не всегда упорядочены, поэтому их приходится дополнительно отсортировать. Затем полученные команды разбиваюися на подкоманды для дальнейшей обработки.
 @<Получить список команд@>=
 {
 	s:="help all"
 	var stdout io.WriteCloser
 	var gdbin io.ReadCloser
 	gdbin, stdout=io.Pipe()
-	
+
 	ready:=make(chan bool)
 	go func() {
 		defer stdout.Close()
@@ -852,7 +855,7 @@ func makePcItems (o [][]string, i int) (res []readline.PrefixCompleterInterface)
 			}
 			if i:=strings.Index(s, " --"); i!=-1 {
 				ss=append(ss, s[:i])
-			} 
+			}
 		}
 		sort.Strings(ss)
 		for _, v:=range ss {
@@ -863,7 +866,7 @@ func makePcItems (o [][]string, i int) (res []readline.PrefixCompleterInterface)
 	<-ready
 }
 
-@ Здесь определяются зарезервированные команды, которые должны иметь возможность запуститься при инициализации и которкие команжы, не описанные в \.{GDB}  
+@ Здесь определяются зарезервированные команды, которые должны иметь возможность запуститься при инициализации и которкие команжы, не описанные в \.{GDB}
 @<Зарезервированные команды \.{GDB}@>=
 "help": "",@#
 "b": "",@#
