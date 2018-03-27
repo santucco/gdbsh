@@ -1,4 +1,3 @@
-\def\ver{0.31}
 \def\sname{MFind}
 \def\stitle{\titlefont \ttitlefont{\sname} - команда \ttitlefont{GDBSh} для поиска по всей памяти процесса}
 \input header

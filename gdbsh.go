@@ -3,7 +3,7 @@
 /*2:*/
 
 
-//line gdbsh.w:19
+//line gdbsh.w:18
 
 //line license:1
 
@@ -36,7 +36,7 @@
 // THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//line gdbsh.w:21
+//line gdbsh.w:20
 
 package main
 
@@ -46,7 +46,7 @@ import(
 /*3:*/
 
 
-//line gdbsh.w:47
+//line gdbsh.w:46
 
 "os"
 "os/exec"
@@ -61,7 +61,7 @@ import(
 /*9:*/
 
 
-//line gdbsh.w:114
+//line gdbsh.w:113
 
 "fmt"
 "bufio"
@@ -76,7 +76,7 @@ import(
 /*13:*/
 
 
-//line gdbsh.w:174
+//line gdbsh.w:173
 
 "unicode"
 "strconv"
@@ -91,7 +91,7 @@ import(
 /*29:*/
 
 
-//line gdbsh.w:499
+//line gdbsh.w:497
 
 "os/signal"
 "syscall"
@@ -105,7 +105,7 @@ import(
 /*39:*/
 
 
-//line gdbsh.w:683
+//line gdbsh.w:682
 
 "github.com/golang/glog"
 
@@ -118,7 +118,7 @@ import(
 /*42:*/
 
 
-//line gdbsh.w:699
+//line gdbsh.w:698
 
 "sync"
 
@@ -131,7 +131,7 @@ import(
 /*53:*/
 
 
-//line gdbsh.w:771
+//line gdbsh.w:770
 
 "github.com/chzyer/readline"
 
@@ -144,7 +144,7 @@ import(
 /*58:*/
 
 
-//line gdbsh.w:831
+//line gdbsh.w:830
 
 "sort"
 
@@ -153,7 +153,7 @@ import(
 /*:58*/
 
 
-//line gdbsh.w:25
+//line gdbsh.w:24
 
 )
 
@@ -163,7 +163,7 @@ type(
 /*10:*/
 
 
-//line gdbsh.w:120
+//line gdbsh.w:119
 
 request struct{
 pid int
@@ -180,7 +180,7 @@ cmd string
 /*20:*/
 
 
-//line gdbsh.w:334
+//line gdbsh.w:333
 
 Cmd interface{
 Start()error
@@ -196,7 +196,7 @@ Wait()error
 /*32:*/
 
 
-//line gdbsh.w:534
+//line gdbsh.w:532
 
 internal struct{
 cmd string
@@ -212,7 +212,7 @@ wait chan bool
 /*:32*/
 
 
-//line gdbsh.w:29
+//line gdbsh.w:28
 
 )
 
@@ -222,7 +222,7 @@ var(
 /*4:*/
 
 
-//line gdbsh.w:53
+//line gdbsh.w:52
 
 gdbin io.WriteCloser
 gdbout io.ReadCloser
@@ -238,7 +238,7 @@ cmd*exec.Cmd
 /*11:*/
 
 
-//line gdbsh.w:128
+//line gdbsh.w:127
 
 togdbch= make(chan interface{})
 fromgdbch= make(chan string)
@@ -253,7 +253,7 @@ ackch= make(chan bool)
 /*18:*/
 
 
-//line gdbsh.w:302
+//line gdbsh.w:301
 
 cmds= map[string]string{
 
@@ -261,7 +261,7 @@ cmds= map[string]string{
 /*60:*/
 
 
-//line gdbsh.w:870
+//line gdbsh.w:869
 
 "help":"",
 "b":"",
@@ -283,14 +283,14 @@ cmds= map[string]string{
 /*:60*/
 
 
-//line gdbsh.w:304
+//line gdbsh.w:303
 
 
 
 /*51:*/
 
 
-//line gdbsh.w:751
+//line gdbsh.w:750
 
 "args":"",
 
@@ -299,7 +299,7 @@ cmds= map[string]string{
 /*:51*/
 
 
-//line gdbsh.w:305
+//line gdbsh.w:304
 
 }
 
@@ -312,9 +312,9 @@ cmds= map[string]string{
 /*40:*/
 
 
-//line gdbsh.w:687
+//line gdbsh.w:686
 
-debug glog.Level= 1
+debug glog.Level= 0
 
 
 
@@ -325,7 +325,7 @@ debug glog.Level= 1
 /*43:*/
 
 
-//line gdbsh.w:703
+//line gdbsh.w:702
 
 ready= make(chan bool,1)
 once sync.Once
@@ -339,7 +339,7 @@ once sync.Once
 /*47:*/
 
 
-//line gdbsh.w:733
+//line gdbsh.w:732
 
 next= make(chan bool,1)
 
@@ -352,7 +352,7 @@ next= make(chan bool,1)
 /*54:*/
 
 
-//line gdbsh.w:775
+//line gdbsh.w:774
 
 pc[]readline.PrefixCompleterInterface
 rl*readline.Instance
@@ -362,7 +362,7 @@ rl*readline.Instance
 /*:54*/
 
 
-//line gdbsh.w:33
+//line gdbsh.w:32
 
 )
 
@@ -372,7 +372,7 @@ func main(){
 /*52:*/
 
 
-//line gdbsh.w:755
+//line gdbsh.w:754
 
 {
 if len(os.Args)> 1&&strings.TrimSpace(os.Args[1])=="-h"{
@@ -393,14 +393,14 @@ return
 /*:52*/
 
 
-//line gdbsh.w:37
+//line gdbsh.w:36
 
 
 
 /*41:*/
 
 
-//line gdbsh.w:691
+//line gdbsh.w:690
 
 {
 glog.V(debug).Infoln("main")
@@ -413,14 +413,14 @@ defer glog.Flush()
 /*:41*/
 
 
-//line gdbsh.w:38
+//line gdbsh.w:37
 
 
 
 /*30:*/
 
 
-//line gdbsh.w:504
+//line gdbsh.w:502
 
 {
 sigch:=make(chan os.Signal,10)
@@ -453,14 +453,14 @@ glog.V(debug).Infof("signal %#v",s)
 /*:30*/
 
 
-//line gdbsh.w:39
+//line gdbsh.w:38
 
 
 
 /*6:*/
 
 
-//line gdbsh.w:66
+//line gdbsh.w:65
 
 {
 
@@ -468,7 +468,7 @@ glog.V(debug).Infof("signal %#v",s)
 /*5:*/
 
 
-//line gdbsh.w:60
+//line gdbsh.w:59
 
 var args[]string
 args= append(args,os.Args...)
@@ -479,7 +479,7 @@ args[0]= "--interpreter=mi"
 /*:5*/
 
 
-//line gdbsh.w:68
+//line gdbsh.w:67
 
 if cmd= exec.Command("gdb",args...);cmd==nil{
 glog.Errorf("can't create command to run gdb\n")
@@ -516,14 +516,14 @@ return
 /*:6*/
 
 
-//line gdbsh.w:40
+//line gdbsh.w:39
 
 
 
 /*12:*/
 
 
-//line gdbsh.w:134
+//line gdbsh.w:133
 
 {
 
@@ -531,7 +531,7 @@ return
 /*16:*/
 
 
-//line gdbsh.w:263
+//line gdbsh.w:262
 
 go func(){
 gdbr:=bufio.NewReader(gdbout)
@@ -547,14 +547,14 @@ close(fromgdbch)
 /*:16*/
 
 
-//line gdbsh.w:136
+//line gdbsh.w:135
 
 
 
 /*17:*/
 
 
-//line gdbsh.w:275
+//line gdbsh.w:274
 
 go func(){
 prev:=""
@@ -563,7 +563,7 @@ prev:=""
 /*46:*/
 
 
-//line gdbsh.w:725
+//line gdbsh.w:724
 
 {
 glog.V(debug).Infoln("an attempt to lock of input")
@@ -576,14 +576,14 @@ glog.V(debug).Infoln("input is locked")
 /*:46*/
 
 
-//line gdbsh.w:278
+//line gdbsh.w:277
 
 
 
 /*55:*/
 
 
-//line gdbsh.w:780
+//line gdbsh.w:779
 
 var err error
 rl,err= readline.NewEx(&readline.Config{
@@ -602,7 +602,7 @@ defer rl.Close()
 /*:55*/
 
 
-//line gdbsh.w:279
+//line gdbsh.w:278
 
 for{
 s,err:=rl.Readline()
@@ -611,7 +611,7 @@ s,err:=rl.Readline()
 /*44:*/
 
 
-//line gdbsh.w:708
+//line gdbsh.w:707
 
 {
 glog.V(debug).Infoln("an attempt to allow of input")
@@ -624,7 +624,7 @@ glog.V(debug).Infoln("input is allowed")
 /*:44*/
 
 
-//line gdbsh.w:282
+//line gdbsh.w:281
 
 if err!=nil{// io.EOF
 break
@@ -639,7 +639,7 @@ var stdout io.WriteCloser= os.Stdout
 /*19:*/
 
 
-//line gdbsh.w:309
+//line gdbsh.w:308
 
 {
 f:=func(r rune)bool{return r=='|'}
@@ -655,7 +655,7 @@ c:=cl[i]
 /*21:*/
 
 
-//line gdbsh.w:341
+//line gdbsh.w:340
 
 {
 var cmd Cmd
@@ -666,7 +666,7 @@ var fromgdb io.WriteCloser
 /*22:*/
 
 
-//line gdbsh.w:352
+//line gdbsh.w:351
 
 {
 n:=strings.TrimSpace(c)
@@ -679,11 +679,10 @@ if _,ok:=cmds[n];!ok{
 /*23:*/
 
 
-//line gdbsh.w:366
+//line gdbsh.w:365
 
 {
 var ar[]string
-c= strings.Replace(c,"$","\\$",-1)
 ar= append(ar,"sh","-c",c)
 glog.V(debug).Infof("command arguments: %#v",ar)
 c:=exec.Command("/usr/bin/env",ar...)
@@ -700,7 +699,7 @@ cmd= c
 /*:23*/
 
 
-//line gdbsh.w:359
+//line gdbsh.w:358
 
 }else{
 
@@ -708,7 +707,7 @@ cmd= c
 /*35:*/
 
 
-//line gdbsh.w:586
+//line gdbsh.w:585
 
 var ci internal
 ci.wait= make(chan bool)
@@ -721,7 +720,7 @@ cmd= &ci
 /*:35*/
 
 
-//line gdbsh.w:361
+//line gdbsh.w:360
 
 }
 }
@@ -731,14 +730,14 @@ cmd= &ci
 /*:22*/
 
 
-//line gdbsh.w:346
+//line gdbsh.w:345
 
 
 
 /*27:*/
 
 
-//line gdbsh.w:454
+//line gdbsh.w:452
 
 {
 switch c:=cmd.(type){
@@ -748,7 +747,7 @@ case*exec.Cmd:
 /*26:*/
 
 
-//line gdbsh.w:429
+//line gdbsh.w:427
 
 {
 
@@ -756,7 +755,7 @@ case*exec.Cmd:
 /*25:*/
 
 
-//line gdbsh.w:409
+//line gdbsh.w:407
 
 {
 c.Stdout= stdout
@@ -778,7 +777,7 @@ c.Stdin= os.Stdin
 /*:25*/
 
 
-//line gdbsh.w:431
+//line gdbsh.w:429
 
 if _,ok:=c.Stdout.(*io.PipeWriter);!ok&&c.Stdout!=os.Stdout{
 toclose= append(toclose,c.Stdout.(io.Closer))
@@ -806,7 +805,7 @@ toclose= append(toclose,r,w)
 /*:26*/
 
 
-//line gdbsh.w:458
+//line gdbsh.w:456
 
 case*internal:
 
@@ -814,7 +813,7 @@ case*internal:
 /*36:*/
 
 
-//line gdbsh.w:595
+//line gdbsh.w:594
 
 {
 c.gdbin,fromgdb= io.Pipe()
@@ -824,7 +823,7 @@ togdb,c.gdbout= io.Pipe()
 /*25:*/
 
 
-//line gdbsh.w:409
+//line gdbsh.w:407
 
 {
 c.Stdout= stdout
@@ -846,7 +845,7 @@ c.Stdin= os.Stdin
 /*:25*/
 
 
-//line gdbsh.w:599
+//line gdbsh.w:598
 
 }
 
@@ -855,7 +854,7 @@ c.Stdin= os.Stdin
 /*:36*/
 
 
-//line gdbsh.w:460
+//line gdbsh.w:458
 
 }
 
@@ -868,7 +867,7 @@ break
 /*28:*/
 
 
-//line gdbsh.w:490
+//line gdbsh.w:488
 
 {
 for _,p:=range toclose{
@@ -882,7 +881,7 @@ toclose= nil
 /*:28*/
 
 
-//line gdbsh.w:467
+//line gdbsh.w:465
 
 
 go func(){
@@ -900,7 +899,7 @@ glog.V(debug).Infof("%s has been recived from pid %d",s,pid)
 /*50:*/
 
 
-//line gdbsh.w:746
+//line gdbsh.w:745
 
 <-next
 glog.V(debug).Infof("an execution of a next command is allowed")
@@ -910,7 +909,7 @@ glog.V(debug).Infof("an execution of a next command is allowed")
 /*:50*/
 
 
-//line gdbsh.w:479
+//line gdbsh.w:477
 
 togdbch<-request{pid:pid,out:fromgdb,cmd:s}
 }
@@ -926,7 +925,7 @@ cnv= append(cnv,cmd)
 /*:27*/
 
 
-//line gdbsh.w:347
+//line gdbsh.w:346
 
 }
 
@@ -935,7 +934,7 @@ cnv= append(cnv,cmd)
 /*:21*/
 
 
-//line gdbsh.w:319
+//line gdbsh.w:318
 
 }
 for _,cmd:=range cnv{
@@ -947,7 +946,7 @@ glog.V(debug).Infof("waiting for process %s with pid %d is finished",v.Path,v.Pr
 /*7:*/
 
 
-//line gdbsh.w:100
+//line gdbsh.w:99
 
 {
 cmd.Wait()
@@ -958,7 +957,7 @@ cmd.Wait()
 /*:7*/
 
 
-//line gdbsh.w:325
+//line gdbsh.w:324
 
 if v,ok:=cmd.(*exec.Cmd);ok{
 glog.V(debug).Infof("process %s with pid %d has finished",v.Path,v.Process.Pid)
@@ -971,7 +970,7 @@ glog.V(debug).Infof("process %s with pid %d has finished",v.Path,v.Process.Pid)
 /*:19*/
 
 
-//line gdbsh.w:291
+//line gdbsh.w:290
 
 prev= s
 rl.SetPrompt("gdbsh$ ")
@@ -980,7 +979,7 @@ rl.SetPrompt("gdbsh$ ")
 /*46:*/
 
 
-//line gdbsh.w:725
+//line gdbsh.w:724
 
 {
 glog.V(debug).Infoln("an attempt to lock of input")
@@ -993,7 +992,7 @@ glog.V(debug).Infoln("input is locked")
 /*:46*/
 
 
-//line gdbsh.w:294
+//line gdbsh.w:293
 
 }
 glog.V(debug).Infof("on exit")
@@ -1006,7 +1005,7 @@ togdbch<-"-gdb-exit"
 /*:17*/
 
 
-//line gdbsh.w:137
+//line gdbsh.w:136
 
 rp:=strings.NewReplacer("\\n","\n","\\t","\t","\\\"","\"")
 devnull,_:=os.Open(os.DevNull)
@@ -1016,7 +1015,7 @@ var file io.WriteCloser= os.Stdout
 /*48:*/
 
 
-//line gdbsh.w:737
+//line gdbsh.w:736
 
 next<-true
 
@@ -1025,7 +1024,7 @@ next<-true
 /*:48*/
 
 
-//line gdbsh.w:141
+//line gdbsh.w:140
 
 loop:for true{
 select{
@@ -1039,7 +1038,7 @@ glog.V(debug).Infof("from gdb: '%s'",s)
 /*14:*/
 
 
-//line gdbsh.w:185
+//line gdbsh.w:184
 
 {
 if len(s)==0{
@@ -1061,7 +1060,7 @@ if strings.HasPrefix(s,"^running"){
 /*46:*/
 
 
-//line gdbsh.w:725
+//line gdbsh.w:724
 
 {
 glog.V(debug).Infoln("an attempt to lock of input")
@@ -1074,7 +1073,7 @@ glog.V(debug).Infoln("input is locked")
 /*:46*/
 
 
-//line gdbsh.w:201
+//line gdbsh.w:200
 
 }
 glog.V(debug).Infof("writing to process %d': %s'",p,s)
@@ -1088,7 +1087,7 @@ glog.Flush()
 /*49:*/
 
 
-//line gdbsh.w:741
+//line gdbsh.w:740
 
 glog.V(debug).Infof("allow an execution of a next command")
 next<-true
@@ -1098,7 +1097,7 @@ next<-true
 /*:49*/
 
 
-//line gdbsh.w:209
+//line gdbsh.w:208
 
 continue
 }
@@ -1108,7 +1107,7 @@ if strings.HasPrefix(s,"*stopped"){
 /*44:*/
 
 
-//line gdbsh.w:708
+//line gdbsh.w:707
 
 {
 glog.V(debug).Infoln("an attempt to allow of input")
@@ -1121,7 +1120,7 @@ glog.V(debug).Infoln("input is allowed")
 /*:44*/
 
 
-//line gdbsh.w:213
+//line gdbsh.w:212
 
 }
 
@@ -1129,7 +1128,7 @@ glog.V(debug).Infoln("input is allowed")
 /*15:*/
 
 
-//line gdbsh.w:225
+//line gdbsh.w:224
 
 {
 if file==os.Stdout{
@@ -1160,7 +1159,7 @@ if strings.HasPrefix(s,"(gdb)"){
 /*45:*/
 
 
-//line gdbsh.w:716
+//line gdbsh.w:715
 
 once.Do(func(){
 go func(){
@@ -1169,7 +1168,7 @@ go func(){
 /*57:*/
 
 
-//line gdbsh.w:819
+//line gdbsh.w:818
 {
 var o[][]string
 
@@ -1177,7 +1176,7 @@ var o[][]string
 /*59:*/
 
 
-//line gdbsh.w:837
+//line gdbsh.w:836
 
 {
 s:="help all"
@@ -1211,7 +1210,7 @@ o= append(o,strings.Fields(v))
 /*19:*/
 
 
-//line gdbsh.w:309
+//line gdbsh.w:308
 
 {
 f:=func(r rune)bool{return r=='|'}
@@ -1227,7 +1226,7 @@ c:=cl[i]
 /*21:*/
 
 
-//line gdbsh.w:341
+//line gdbsh.w:340
 
 {
 var cmd Cmd
@@ -1238,7 +1237,7 @@ var fromgdb io.WriteCloser
 /*22:*/
 
 
-//line gdbsh.w:352
+//line gdbsh.w:351
 
 {
 n:=strings.TrimSpace(c)
@@ -1251,11 +1250,10 @@ if _,ok:=cmds[n];!ok{
 /*23:*/
 
 
-//line gdbsh.w:366
+//line gdbsh.w:365
 
 {
 var ar[]string
-c= strings.Replace(c,"$","\\$",-1)
 ar= append(ar,"sh","-c",c)
 glog.V(debug).Infof("command arguments: %#v",ar)
 c:=exec.Command("/usr/bin/env",ar...)
@@ -1272,7 +1270,7 @@ cmd= c
 /*:23*/
 
 
-//line gdbsh.w:359
+//line gdbsh.w:358
 
 }else{
 
@@ -1280,7 +1278,7 @@ cmd= c
 /*35:*/
 
 
-//line gdbsh.w:586
+//line gdbsh.w:585
 
 var ci internal
 ci.wait= make(chan bool)
@@ -1293,7 +1291,7 @@ cmd= &ci
 /*:35*/
 
 
-//line gdbsh.w:361
+//line gdbsh.w:360
 
 }
 }
@@ -1303,14 +1301,14 @@ cmd= &ci
 /*:22*/
 
 
-//line gdbsh.w:346
+//line gdbsh.w:345
 
 
 
 /*27:*/
 
 
-//line gdbsh.w:454
+//line gdbsh.w:452
 
 {
 switch c:=cmd.(type){
@@ -1320,7 +1318,7 @@ case*exec.Cmd:
 /*26:*/
 
 
-//line gdbsh.w:429
+//line gdbsh.w:427
 
 {
 
@@ -1328,7 +1326,7 @@ case*exec.Cmd:
 /*25:*/
 
 
-//line gdbsh.w:409
+//line gdbsh.w:407
 
 {
 c.Stdout= stdout
@@ -1350,7 +1348,7 @@ c.Stdin= os.Stdin
 /*:25*/
 
 
-//line gdbsh.w:431
+//line gdbsh.w:429
 
 if _,ok:=c.Stdout.(*io.PipeWriter);!ok&&c.Stdout!=os.Stdout{
 toclose= append(toclose,c.Stdout.(io.Closer))
@@ -1378,7 +1376,7 @@ toclose= append(toclose,r,w)
 /*:26*/
 
 
-//line gdbsh.w:458
+//line gdbsh.w:456
 
 case*internal:
 
@@ -1386,7 +1384,7 @@ case*internal:
 /*36:*/
 
 
-//line gdbsh.w:595
+//line gdbsh.w:594
 
 {
 c.gdbin,fromgdb= io.Pipe()
@@ -1396,7 +1394,7 @@ togdb,c.gdbout= io.Pipe()
 /*25:*/
 
 
-//line gdbsh.w:409
+//line gdbsh.w:407
 
 {
 c.Stdout= stdout
@@ -1418,7 +1416,7 @@ c.Stdin= os.Stdin
 /*:25*/
 
 
-//line gdbsh.w:599
+//line gdbsh.w:598
 
 }
 
@@ -1427,7 +1425,7 @@ c.Stdin= os.Stdin
 /*:36*/
 
 
-//line gdbsh.w:460
+//line gdbsh.w:458
 
 }
 
@@ -1440,7 +1438,7 @@ break
 /*28:*/
 
 
-//line gdbsh.w:490
+//line gdbsh.w:488
 
 {
 for _,p:=range toclose{
@@ -1454,7 +1452,7 @@ toclose= nil
 /*:28*/
 
 
-//line gdbsh.w:467
+//line gdbsh.w:465
 
 
 go func(){
@@ -1472,7 +1470,7 @@ glog.V(debug).Infof("%s has been recived from pid %d",s,pid)
 /*50:*/
 
 
-//line gdbsh.w:746
+//line gdbsh.w:745
 
 <-next
 glog.V(debug).Infof("an execution of a next command is allowed")
@@ -1482,7 +1480,7 @@ glog.V(debug).Infof("an execution of a next command is allowed")
 /*:50*/
 
 
-//line gdbsh.w:479
+//line gdbsh.w:477
 
 togdbch<-request{pid:pid,out:fromgdb,cmd:s}
 }
@@ -1498,7 +1496,7 @@ cnv= append(cnv,cmd)
 /*:27*/
 
 
-//line gdbsh.w:347
+//line gdbsh.w:346
 
 }
 
@@ -1507,7 +1505,7 @@ cnv= append(cnv,cmd)
 /*:21*/
 
 
-//line gdbsh.w:319
+//line gdbsh.w:318
 
 }
 for _,cmd:=range cnv{
@@ -1519,7 +1517,7 @@ glog.V(debug).Infof("waiting for process %s with pid %d is finished",v.Path,v.Pr
 /*7:*/
 
 
-//line gdbsh.w:100
+//line gdbsh.w:99
 
 {
 cmd.Wait()
@@ -1530,7 +1528,7 @@ cmd.Wait()
 /*:7*/
 
 
-//line gdbsh.w:325
+//line gdbsh.w:324
 
 if v,ok:=cmd.(*exec.Cmd);ok{
 glog.V(debug).Infof("process %s with pid %d has finished",v.Path,v.Process.Pid)
@@ -1543,7 +1541,7 @@ glog.V(debug).Infof("process %s with pid %d has finished",v.Path,v.Process.Pid)
 /*:19*/
 
 
-//line gdbsh.w:865
+//line gdbsh.w:864
 
 <-ready
 }
@@ -1553,7 +1551,7 @@ glog.V(debug).Infof("process %s with pid %d has finished",v.Path,v.Process.Pid)
 /*:59*/
 
 
-//line gdbsh.w:821
+//line gdbsh.w:820
 
 for _,v:=range o{
 cmds[v[0]]= ""
@@ -1568,14 +1566,14 @@ pc= append(pc,readline.PcItem("help",pc...))
 /*:57*/
 
 
-//line gdbsh.w:719
+//line gdbsh.w:718
 
 
 
 /*44:*/
 
 
-//line gdbsh.w:708
+//line gdbsh.w:707
 
 {
 glog.V(debug).Infoln("an attempt to allow of input")
@@ -1588,7 +1586,7 @@ glog.V(debug).Infoln("input is allowed")
 /*:44*/
 
 
-//line gdbsh.w:720
+//line gdbsh.w:719
 
 }()
 })
@@ -1598,7 +1596,7 @@ glog.V(debug).Infoln("input is allowed")
 /*:45*/
 
 
-//line gdbsh.w:250
+//line gdbsh.w:249
 
 }
 continue
@@ -1616,7 +1614,7 @@ s= rp.Replace(s)
 /*:15*/
 
 
-//line gdbsh.w:215
+//line gdbsh.w:214
 
 glog.V(debug).Infof("sending: '%s'",s)
 if n,err:=io.WriteString(file,s);err!=nil||n!=len(s){
@@ -1631,7 +1629,7 @@ file= devnull
 /*:14*/
 
 
-//line gdbsh.w:149
+//line gdbsh.w:148
 
 case v,ok:=<-togdbch:
 if!ok{
@@ -1661,14 +1659,14 @@ io.WriteString(gdbin,r+"\n")
 /*:12*/
 
 
-//line gdbsh.w:41
+//line gdbsh.w:40
 
 
 
 /*7:*/
 
 
-//line gdbsh.w:100
+//line gdbsh.w:99
 
 {
 cmd.Wait()
@@ -1679,14 +1677,14 @@ cmd.Wait()
 /*:7*/
 
 
-//line gdbsh.w:42
+//line gdbsh.w:41
 
 
 
 /*8:*/
 
 
-//line gdbsh.w:106
+//line gdbsh.w:105
 
 {
 if!cmd.ProcessState.Success(){
@@ -1699,7 +1697,7 @@ fmt.Fprintf(os.Stderr,"\n%s has finished with an error: %s\n",cmd.Path,cmd.Proce
 /*:8*/
 
 
-//line gdbsh.w:43
+//line gdbsh.w:42
 
 }
 
@@ -1712,7 +1710,7 @@ fmt.Fprintf(os.Stderr,"\n%s has finished with an error: %s\n",cmd.Path,cmd.Proce
 /*24:*/
 
 
-//line gdbsh.w:382
+//line gdbsh.w:380
 
 func FieldsFunc(s string,f func(rune)bool)[]string{
 openeds:=false
@@ -1748,7 +1746,7 @@ return strings.FieldsFunc(s,ff)
 /*33:*/
 
 
-//line gdbsh.w:545
+//line gdbsh.w:543
 
 func(this*internal)Start()error{
 go func(){
@@ -1759,13 +1757,14 @@ defer this.Stdout.Close()
 }
 defer close(this.wait)
 defer func(){glog.V(debug).Infof("command %#v has done",this.cmd)}()
-c:=strings.TrimSpace(this.cmd)
-if i:=strings.IndexFunc(c,unicode.IsSpace);i!=-1{
-c= c[:i]
+this.cmd= strings.TrimLeftFunc(this.cmd,unicode.IsSpace)
+var c string
+if i:=strings.IndexFunc(this.cmd,unicode.IsSpace);i!=-1{
+c= this.cmd[:i]
 }
 
 if c=="args"{
-this.cmd= this.cmd[4:]
+this.cmd= this.cmd[len(c):]
 stdr:=bufio.NewReader(this.Stdin)
 for s,err:=stdr.ReadString('\n');err==nil;s,err= stdr.ReadString('\n'){
 cmd:=this.cmd+" "+strings.TrimSpace(s)
@@ -1774,7 +1773,7 @@ cmd:=this.cmd+" "+strings.TrimSpace(s)
 /*37:*/
 
 
-//line gdbsh.w:604
+//line gdbsh.w:603
 
 {
 glog.V(debug).Infof("internal command: %#v",cmd)
@@ -1801,7 +1800,7 @@ s= s[2:len(s)-2]
 /*38:*/
 
 
-//line gdbsh.w:666
+//line gdbsh.w:665
 
 {
 if s1:=strings.TrimSpace(s);s1==">"{
@@ -1823,7 +1822,7 @@ continue
 /*:38*/
 
 
-//line gdbsh.w:625
+//line gdbsh.w:624
 
 case'^':
 quit= true
@@ -1869,7 +1868,7 @@ break
 /*:37*/
 
 
-//line gdbsh.w:565
+//line gdbsh.w:564
 
 }
 }else{
@@ -1879,7 +1878,7 @@ cmd:=this.cmd
 /*37:*/
 
 
-//line gdbsh.w:604
+//line gdbsh.w:603
 
 {
 glog.V(debug).Infof("internal command: %#v",cmd)
@@ -1906,7 +1905,7 @@ s= s[2:len(s)-2]
 /*38:*/
 
 
-//line gdbsh.w:666
+//line gdbsh.w:665
 
 {
 if s1:=strings.TrimSpace(s);s1==">"{
@@ -1928,7 +1927,7 @@ continue
 /*:38*/
 
 
-//line gdbsh.w:625
+//line gdbsh.w:624
 
 case'^':
 quit= true
@@ -1974,7 +1973,7 @@ break
 /*:37*/
 
 
-//line gdbsh.w:569
+//line gdbsh.w:568
 
 }
 return
@@ -1991,7 +1990,7 @@ return nil
 /*34:*/
 
 
-//line gdbsh.w:577
+//line gdbsh.w:576
 
 func(this*internal)Wait()error{
 glog.V(debug).Infof("waiting for internal command %#v is finished",this.cmd)
@@ -2009,7 +2008,7 @@ return nil
 /*56:*/
 
 
-//line gdbsh.w:796
+//line gdbsh.w:795
 
 func makePcItems(o[][]string,i int)(res[]readline.PrefixCompleterInterface){
 loop:for len(o)> 0{

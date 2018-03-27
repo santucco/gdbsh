@@ -1,4 +1,3 @@
-\def\ver{0.31}
 \def\sname{GDBSh}
 \def\stitle{\titlefont \ttitlefont{\sname} - командная оболочка для \ttitlefont{GDB}}
 \input header
@@ -126,8 +125,8 @@ request struct {
 
 @
 @<Глобальные переменные@>=
-togdbch 	=make(chan interface{})
-fromgdbch 	=make(chan string)
+togdbch		=make(chan interface{})
+fromgdbch	=make(chan string)
 ackch		=make(chan bool)
 
 @ Запускаем параллельные обработки ввода/вывода от \.{GDB} и организуем синхронное выполнение команд
@@ -147,7 +146,7 @@ ackch		=make(chan bool)
 				}
 				glog.V(debug).Infof("from gdb: '%s'", s)
 				@<Обработка и отправка |s| в |file|@>
- 			case v, ok:=<-togdbch:
+			case v, ok:=<-togdbch:
 				if !ok {
 					break loop
 				}
@@ -329,7 +328,7 @@ cmds=map[string]string {
 	}
 }
 
-@ Так как команды могу т быть как внутренними, так и внешними, создадим унифицированный интерфейс |Cmd|, подогнанный к функциям |exec.Cmd|.
+@ Так как команды могут быть как внутренними, так и внешними, создадим унифицированный интерфейс |Cmd|, подогнанный к функциям |exec.Cmd|.
 Таким образом можно будет запускать и ожидаться окончания выполнения команд оинаковым образом
 @<Типы@>=
 Cmd interface {
@@ -366,7 +365,6 @@ Cmd interface {
 @<Создать внешний процесс@>=
 {
 	var ar []string
-	c=strings.Replace(c, "$", "\\$", -1)
 	ar=append(ar, "sh", "-c", c)
 	glog.V(debug).Infof("command arguments: %#v", ar)
 	c:=exec.Command("/usr/bin/env", ar...)
@@ -533,7 +531,7 @@ func FieldsFunc(s string, f func(rune) bool) []string {
 @
 @<Типы@>=
 internal struct {
-	cmd		string
+	cmd	string
 	gdbin	io.ReadCloser
 	gdbout	io.WriteCloser
 	Stdin	io.ReadCloser
@@ -552,13 +550,14 @@ func (this *internal)Start() error {
 		}
 		defer close(this.wait)
 		defer func() {glog.V(debug).Infof("command %#v has done", this.cmd)}()
-		c:=strings.TrimSpace(this.cmd)
-		if i:=strings.IndexFunc(c, unicode.IsSpace); i!=-1 {
-			c=c[:i]
+		this.cmd=strings.TrimLeftFunc(this.cmd, unicode.IsSpace)
+		var c string
+		if i:=strings.IndexFunc(this.cmd, unicode.IsSpace); i!=-1 {
+			c=this.cmd[:i]
 		}
 
 		if c=="args" {
-			this.cmd=this.cmd[4:]
+			this.cmd=this.cmd[len(c):]
 			stdr:=bufio.NewReader(this.Stdin)
 			for s, err:=stdr.ReadString('\n'); err==nil; s, err=stdr.ReadString('\n') {
 				cmd:=this.cmd + " " + strings.TrimSpace(s)
@@ -573,7 +572,7 @@ func (this *internal)Start() error {
 	return nil
 }
 
-@ Метод |Stop| для внутренней команды.
+@ Метод |Wait| для внутренней команды.
 @c
 func (this *internal)Wait() error {
 	glog.V(debug).Infof("waiting for internal command %#v is finished", this.cmd)
@@ -685,7 +684,7 @@ func (this *internal)Wait() error {
 
 @
 @<Глобальные переменные@>=
-debug glog.Level=1
+debug glog.Level=0
 
 @
 @<Подготовить трассировку@>=
@@ -796,7 +795,7 @@ rl *readline.Instance
 @c
 func makePcItems (o [][]string, i int) (res []readline.PrefixCompleterInterface) {
 	loop: for len(o)>0{
-	 	if len(o[0])<=i || o[0][0]=="help" {
+		if len(o[0])<=i || o[0][0]=="help" {
 			o=o[1:]
 			continue
 		}
@@ -815,7 +814,7 @@ func makePcItems (o [][]string, i int) (res []readline.PrefixCompleterInterface)
 	return res
 }
 
-@ Создаем список для автозаполнения и лдополняем его командами |"help"| и |"args"| с автозаполнением всем перечнем команд.
+@ Создаем список для автозаполнения и дополняем его командами |"help"| и |"args"| с автозаполнением всем перечнем команд.
 @<Заполнить автозаполнение и список зарезервированных команд@>={
 	var o [][]string
 	@<Получить список команд@>
@@ -833,7 +832,7 @@ func makePcItems (o [][]string, i int) (res []readline.PrefixCompleterInterface)
 
 @ Получим скисок всех команд с помощью команды |"help all"|. Для этого запустим команду, а в качестве канала для вывода будем использовать канал в памяти,
 из которого в отдельном потоке будет вычитываться весь вывод запущеной команды, фильтроваться и добавляться в массив строк. К сожалению, из-за ошибок в \.{GDB},
-команды не всегда упорядочены, поэтому их приходится дополнительно отсортировать. Затем полученные команды разбиваюися на подкоманды для дальнейшей обработки.
+команды не всегда упорядочены, поэтому их приходится дополнительно отсортировать. Затем полученные команды разбиваются на подкоманды для дальнейшей обработки.
 @<Получить список команд@>=
 {
 	s:="help all"
@@ -866,7 +865,7 @@ func makePcItems (o [][]string, i int) (res []readline.PrefixCompleterInterface)
 	<-ready
 }
 
-@ Здесь определяются зарезервированные команды, которые должны иметь возможность запуститься при инициализации и которкие команжы, не описанные в \.{GDB}
+@ Здесь определяются зарезервированные команды, которые должны иметь возможность запуститься при инициализации и короткие команды, не описанные в \.{GDB}
 @<Зарезервированные команды \.{GDB}@>=
 "help": "",@#
 "b": "",@#

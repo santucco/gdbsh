@@ -3,7 +3,7 @@
 /*2:*/
 
 
-//line common.w:12
+//line common.w:11
 
 //line license:1
 
@@ -36,7 +36,7 @@
 // THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//line common.w:14
+//line common.w:13
 
 package common
 
@@ -46,7 +46,7 @@ import(
 /*4:*/
 
 
-//line common.w:41
+//line common.w:40
 
 "strings"
 
@@ -59,7 +59,7 @@ import(
 /*6:*/
 
 
-//line common.w:167
+//line common.w:166
 
 "io"
 "fmt"
@@ -74,7 +74,7 @@ import(
 /*15:*/
 
 
-//line common.w:400
+//line common.w:399
 
 "errors"
 
@@ -87,7 +87,7 @@ import(
 /*19:*/
 
 
-//line common.w:470
+//line common.w:469
 
 "github.com/golang/glog"
 
@@ -96,7 +96,7 @@ import(
 /*:19*/
 
 
-//line common.w:18
+//line common.w:17
 
 )
 
@@ -106,7 +106,7 @@ type(
 /*3:*/
 
 
-//line common.w:30
+//line common.w:29
 
 Value interface{}
 Result struct{
@@ -122,7 +122,7 @@ ValueList[]Value
 /*:3*/
 
 
-//line common.w:22
+//line common.w:21
 
 )
 
@@ -132,7 +132,7 @@ var(
 /*8:*/
 
 
-//line common.w:201
+//line common.w:200
 
 rp= strings.NewReplacer("\\n","","\\t","","\\\"","\"")
 
@@ -145,7 +145,7 @@ rp= strings.NewReplacer("\\n","","\\t","","\\\"","\"")
 /*16:*/
 
 
-//line common.w:404
+//line common.w:403
 
 UnknownError= errors.New("Unknown error")
 
@@ -158,7 +158,7 @@ UnknownError= errors.New("Unknown error")
 /*20:*/
 
 
-//line common.w:474
+//line common.w:473
 
 debug glog.Level= 0
 
@@ -168,7 +168,7 @@ debug glog.Level= 0
 /*:20*/
 
 
-//line common.w:26
+//line common.w:25
 
 )
 
@@ -181,7 +181,7 @@ debug glog.Level= 0
 /*5:*/
 
 
-//line common.w:45
+//line common.w:44
 
 // ParseString parses GDB result from s and produces []Result, a rest of string and verdict everything is ok  
 func ParseResult(s string)(ResultList,string,bool){
@@ -312,7 +312,7 @@ return nil,s,false
 /*7:*/
 
 
-//line common.w:173
+//line common.w:172
 
 // Sections retrieve information about sections placed in memory of GDB's target 
 // and returns a list of a start and an end addresses, separated by the comma or error, if any. 
@@ -349,7 +349,7 @@ return sections,nil
 /*9:*/
 
 
-//line common.w:205
+//line common.w:204
 
 // FindAddress find address in section with specified options and returns
 func FindAddress(gdbin io.Reader,gdbout io.Writer,options string,section string,address string)([]string,error){
@@ -388,7 +388,7 @@ return addrs,nil
 /*10:*/
 
 
-//line common.w:235
+//line common.w:234
 
 // Vtables obtains addresses of virtual tables of instance and returns list of addresses or an error if any
 func Vtables(gdbin io.Reader,gdbout io.Writer,instance string)([]string,error){
@@ -425,7 +425,7 @@ return vtables,nil
 /*11:*/
 
 
-//line common.w:263
+//line common.w:262
 
 // String returns formatted result
 func(this*Result)String()string{
@@ -458,7 +458,7 @@ return fmt.Sprintf("%s=%s",this.Name,s)
 /*12:*/
 
 
-//line common.w:287
+//line common.w:286
 
 // String returns formatted result
 func(this*ResultList)String()string{
@@ -495,7 +495,7 @@ return s
 /*13:*/
 
 
-//line common.w:315
+//line common.w:314
 
 // String returns formatted result
 func(this*Tuple)String()string{
@@ -542,7 +542,7 @@ return s
 /*14:*/
 
 
-//line common.w:353
+//line common.w:352
 
 // String returns formatted result
 func(this*ValueList)String()string{
@@ -598,7 +598,7 @@ return s
 /*17:*/
 
 
-//line common.w:408
+//line common.w:407
 
 // RunCommand runs cmd and returns output, results or an error if any
 func RunCommand(gdbin io.Reader,gdbout io.Writer,cmd string)([]string,ResultList,error){
@@ -647,7 +647,7 @@ return out,res,err
 /*18:*/
 
 
-//line common.w:448
+//line common.w:447
 
 // Get return Result by name and a success of the operation
 func(this*ResultList)Get(n string)(Result,bool){

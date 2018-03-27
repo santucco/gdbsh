@@ -1,4 +1,3 @@
-\def\ver{0.31}
 \def\sname{FindRef}
 \def\stitle{\titlefont \ttitlefont{\sname} - команда \ttitlefont{GDBSh} для поиска ссылок на объекты}
 \input header

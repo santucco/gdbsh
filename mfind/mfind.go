@@ -3,7 +3,7 @@
 /*2:*/
 
 
-//line mfind.w:14
+//line mfind.w:13
 
 //line license:1
 
@@ -36,7 +36,7 @@
 // THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//line mfind.w:16
+//line mfind.w:15
 
 package main
 
@@ -46,7 +46,7 @@ import(
 /*3:*/
 
 
-//line mfind.w:46
+//line mfind.w:45
 
 "fmt"
 "strings"
@@ -61,7 +61,7 @@ import(
 /*6:*/
 
 
-//line mfind.w:102
+//line mfind.w:101
 
 "bitbucket.org/santucco/gdbsh/common"
 
@@ -74,7 +74,7 @@ import(
 /*10:*/
 
 
-//line mfind.w:139
+//line mfind.w:138
 
 "io"
 
@@ -83,7 +83,7 @@ import(
 /*:10*/
 
 
-//line mfind.w:20
+//line mfind.w:19
 
 "github.com/golang/glog"
 "os"
@@ -96,7 +96,7 @@ var(
 /*4:*/
 
 
-//line mfind.w:52
+//line mfind.w:51
 
 options string
 values[]string
@@ -113,7 +113,7 @@ num uint
 /*7:*/
 
 
-//line mfind.w:106
+//line mfind.w:105
 
 sections[]string
 
@@ -122,7 +122,7 @@ sections[]string
 /*:7*/
 
 
-//line mfind.w:27
+//line mfind.w:26
 
 debug glog.Level= 1
 )
@@ -136,7 +136,7 @@ defer glog.V(debug).Infoln("main is done")
 /*5:*/
 
 
-//line mfind.w:60
+//line mfind.w:59
 
 {
 flag.BoolVar(&help,"help",false,"print the help")
@@ -183,7 +183,7 @@ values= flag.Args()
 /*:5*/
 
 
-//line mfind.w:35
+//line mfind.w:34
 
 gdbin:=os.NewFile(uintptr(3),"input")
 gdbout:=os.NewFile(uintptr(4),"output")
@@ -195,7 +195,7 @@ defer os.Stdout.Close()
 /*8:*/
 
 
-//line mfind.w:110
+//line mfind.w:109
 
 {
 var err error
@@ -211,14 +211,14 @@ return
 /*:8*/
 
 
-//line mfind.w:41
+//line mfind.w:40
 
 
 
 /*9:*/
 
 
-//line mfind.w:121
+//line mfind.w:120
 
 {
 glog.V(debug).Infof("%#v",sections)
@@ -229,7 +229,7 @@ for _,val:=range values{
 /*11:*/
 
 
-//line mfind.w:143
+//line mfind.w:142
 
 {
 v:=fmt.Sprintf("%s:\n",val)
@@ -256,7 +256,7 @@ v= ""
 /*:11*/
 
 
-//line mfind.w:126
+//line mfind.w:125
 
 }
 }else{
@@ -268,7 +268,7 @@ val= strings.TrimSpace(val)
 /*11:*/
 
 
-//line mfind.w:143
+//line mfind.w:142
 
 {
 v:=fmt.Sprintf("%s:\n",val)
@@ -295,7 +295,7 @@ v= ""
 /*:11*/
 
 
-//line mfind.w:132
+//line mfind.w:131
 
 }
 }
@@ -307,7 +307,7 @@ v= ""
 /*:9*/
 
 
-//line mfind.w:42
+//line mfind.w:41
 
 }
 

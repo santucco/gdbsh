@@ -1,4 +1,3 @@
-\def\ver{0.3}
 \def\sname{Common}
 \def\stitle{\titlefont \ttitlefont{\sname} - пакет для упрощения разработки команд \ttitlefont{GDBSh}}
 \input header

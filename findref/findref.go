@@ -3,7 +3,7 @@
 /*2:*/
 
 
-//line findref.w:14
+//line findref.w:13
 
 //line license:1
 
@@ -36,7 +36,7 @@
 // THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//line findref.w:16
+//line findref.w:15
 
 package main
 
@@ -46,7 +46,7 @@ import(
 /*3:*/
 
 
-//line findref.w:45
+//line findref.w:44
 
 "fmt"
 "strings"
@@ -61,7 +61,7 @@ import(
 /*6:*/
 
 
-//line findref.w:82
+//line findref.w:81
 
 "bitbucket.org/santucco/gdbsh/common"
 
@@ -74,7 +74,7 @@ import(
 /*10:*/
 
 
-//line findref.w:120
+//line findref.w:119
 
 "io"
 
@@ -87,7 +87,7 @@ import(
 /*14:*/
 
 
-//line findref.w:160
+//line findref.w:159
 
 "strconv"
 
@@ -96,7 +96,7 @@ import(
 /*:14*/
 
 
-//line findref.w:20
+//line findref.w:19
 
 "github.com/golang/glog"
 "os"
@@ -109,7 +109,7 @@ var(
 /*4:*/
 
 
-//line findref.w:51
+//line findref.w:50
 
 instances[]string
 offset uint
@@ -124,7 +124,7 @@ help bool
 /*7:*/
 
 
-//line findref.w:86
+//line findref.w:85
 
 sections[]string
 
@@ -137,7 +137,7 @@ sections[]string
 /*11:*/
 
 
-//line findref.w:124
+//line findref.w:123
 
 vtables[]string
 
@@ -146,7 +146,7 @@ vtables[]string
 /*:11*/
 
 
-//line findref.w:27
+//line findref.w:26
 
 debug glog.Level= 1
 )
@@ -160,7 +160,7 @@ defer glog.V(debug).Infoln("main is done")
 /*5:*/
 
 
-//line findref.w:57
+//line findref.w:56
 
 {
 flag.BoolVar(&help,"help",false,"print the help")
@@ -190,7 +190,7 @@ instances= flag.Args()
 /*:5*/
 
 
-//line findref.w:35
+//line findref.w:34
 
 gdbin:=os.NewFile(uintptr(3),"input")
 gdbout:=os.NewFile(uintptr(4),"output")
@@ -201,7 +201,7 @@ defer gdbout.Close()
 /*8:*/
 
 
-//line findref.w:90
+//line findref.w:89
 
 {
 var err error
@@ -218,14 +218,14 @@ return
 /*:8*/
 
 
-//line findref.w:40
+//line findref.w:39
 
 
 
 /*9:*/
 
 
-//line findref.w:102
+//line findref.w:101
 
 {
 glog.V(debug).Infof("instances: %#v",instances)
@@ -236,7 +236,7 @@ for _,val:=range instances{
 /*12:*/
 
 
-//line findref.w:128
+//line findref.w:127
 
 {
 vtables,err:=common.Vtables(gdbin,gdbout,val)
@@ -251,7 +251,7 @@ rl:=make(map[string][]string)
 /*13:*/
 
 
-//line findref.w:143
+//line findref.w:142
 
 {
 for _,v:=range vtables{
@@ -273,14 +273,14 @@ glog.V(debug).Infof("addresses: %#v",rl)
 /*:13*/
 
 
-//line findref.w:137
+//line findref.w:136
 
 
 
 /*15:*/
 
 
-//line findref.w:164
+//line findref.w:163
 
 {
 cmds:=make(map[string]map[int64][]string)
@@ -289,7 +289,7 @@ cmds:=make(map[string]map[int64][]string)
 /*16:*/
 
 
-//line findref.w:173
+//line findref.w:172
 
 {
 rp:=strings.NewReplacer("\\n","","\\t","","\\\"","\"")
@@ -363,14 +363,14 @@ cmds[address][i]= append(cmds[address][i],fmt.Sprintf("p *(%s*)0x%x\n",sym[11:],
 /*:16*/
 
 
-//line findref.w:167
+//line findref.w:166
 
 
 
 /*17:*/
 
 
-//line findref.w:242
+//line findref.w:241
 
 {
 rp:=strings.NewReplacer("\\n","\n","\\t","\t","\\\"","\"")
@@ -416,7 +416,7 @@ return
 /*:17*/
 
 
-//line findref.w:168
+//line findref.w:167
 
 }
 
@@ -426,7 +426,7 @@ return
 /*:15*/
 
 
-//line findref.w:138
+//line findref.w:137
 
 
 }
@@ -436,7 +436,7 @@ return
 /*:12*/
 
 
-//line findref.w:107
+//line findref.w:106
 
 }
 }else{
@@ -448,7 +448,7 @@ val= strings.TrimSpace(val)
 /*12:*/
 
 
-//line findref.w:128
+//line findref.w:127
 
 {
 vtables,err:=common.Vtables(gdbin,gdbout,val)
@@ -463,7 +463,7 @@ rl:=make(map[string][]string)
 /*13:*/
 
 
-//line findref.w:143
+//line findref.w:142
 
 {
 for _,v:=range vtables{
@@ -485,14 +485,14 @@ glog.V(debug).Infof("addresses: %#v",rl)
 /*:13*/
 
 
-//line findref.w:137
+//line findref.w:136
 
 
 
 /*15:*/
 
 
-//line findref.w:164
+//line findref.w:163
 
 {
 cmds:=make(map[string]map[int64][]string)
@@ -501,7 +501,7 @@ cmds:=make(map[string]map[int64][]string)
 /*16:*/
 
 
-//line findref.w:173
+//line findref.w:172
 
 {
 rp:=strings.NewReplacer("\\n","","\\t","","\\\"","\"")
@@ -575,14 +575,14 @@ cmds[address][i]= append(cmds[address][i],fmt.Sprintf("p *(%s*)0x%x\n",sym[11:],
 /*:16*/
 
 
-//line findref.w:167
+//line findref.w:166
 
 
 
 /*17:*/
 
 
-//line findref.w:242
+//line findref.w:241
 
 {
 rp:=strings.NewReplacer("\\n","\n","\\t","\t","\\\"","\"")
@@ -628,7 +628,7 @@ return
 /*:17*/
 
 
-//line findref.w:168
+//line findref.w:167
 
 }
 
@@ -638,7 +638,7 @@ return
 /*:15*/
 
 
-//line findref.w:138
+//line findref.w:137
 
 
 }
@@ -648,7 +648,7 @@ return
 /*:12*/
 
 
-//line findref.w:113
+//line findref.w:112
 
 }
 }
@@ -660,7 +660,7 @@ return
 /*:9*/
 
 
-//line findref.w:41
+//line findref.w:40
 
 }
 
