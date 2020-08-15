@@ -10,7 +10,7 @@
 // This file is part of GDBSh toolset
 // Author Alexander Sychev
 //
-// Copyright (c) 2015, 2016 Alexander Sychev. All rights reserved.
+// Copyright (c) 2015, 2016, 2018, 2020 Alexander Sychev. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -63,7 +63,7 @@ import(
 
 //line findref.w:81
 
-"bitbucket.org/santucco/gdbsh/common"
+"github.com/santucco/gdbsh/common"
 
 
 

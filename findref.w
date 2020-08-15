@@ -79,7 +79,7 @@ help		bool
 
 @
 @<Импортируемые пакеты@>=
-"bitbucket.org/santucco/gdbsh/common"
+"github.com/santucco/gdbsh/common"
 
 @
 @<Глобальные переменные@>=

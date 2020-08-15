@@ -1,7 +1,6 @@
 # This file is part of GDBSh toolset
-# Author Alexander Sychev
 #
-# Copyright © 2015, 2016 Alexander Sychev. All rights reserved.
+# Copyright © 2015, 2016, 2018, 2020 Alexander Sychev. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -38,7 +37,7 @@ IFILES= \
 .INTERMEDIATE: $(IFILES)
 
 TEXP?=xetex
-#gcflags=-gcflags '-N -l'
+gcflags=-gcflags '-N -l'
 
 TARGETS=common gdbsh mfind/mfind findref/findref
 
@@ -96,9 +95,9 @@ install: common gdbsh mfind findref
 
 clean:
 	go clean
-	(cd mfind; go clean)
-	(cd findref; go clean)
-	rm -f *.pdf $(IFILES)
+	(cd mfind; go clean; rm *.go)
+	(cd findref; go clean; rm *.go)
+	rm -f *.go *.pdf $(IFILES)
 
 
 
