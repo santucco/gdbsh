@@ -46,7 +46,7 @@ import(
 /*3:*/
 
 
-//line findref.w:44
+//line findref.w:41
 
 "fmt"
 "strings"
@@ -109,7 +109,7 @@ var(
 /*4:*/
 
 
-//line findref.w:50
+//line findref.w:47
 
 instances[]string
 offset uint
@@ -152,15 +152,12 @@ debug glog.Level= 1
 )
 
 func main(){
-defer glog.Flush()
-glog.V(debug).Infoln("main")
-defer glog.V(debug).Infoln("main is done")
 
 
 /*5:*/
 
 
-//line findref.w:56
+//line findref.w:53
 
 {
 flag.BoolVar(&help,"help",false,"print the help")
@@ -179,6 +176,9 @@ if help{
 flag.Usage()
 return
 }
+defer glog.Flush()
+glog.V(debug).Infoln("main")
+defer glog.V(debug).Infoln("main is done")
 glog.V(debug).Infof("args: %#v",flag.Args())
 if len(flag.Args())> 0{
 instances= flag.Args()
@@ -190,7 +190,7 @@ instances= flag.Args()
 /*:5*/
 
 
-//line findref.w:34
+//line findref.w:31
 
 gdbin:=os.NewFile(uintptr(3),"input")
 gdbout:=os.NewFile(uintptr(4),"output")
@@ -218,7 +218,7 @@ return
 /*:8*/
 
 
-//line findref.w:39
+//line findref.w:36
 
 
 
@@ -660,7 +660,7 @@ return
 /*:9*/
 
 
-//line findref.w:40
+//line findref.w:37
 
 }
 

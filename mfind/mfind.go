@@ -46,7 +46,7 @@ import(
 /*3:*/
 
 
-//line mfind.w:45
+//line mfind.w:42
 
 "fmt"
 "strings"
@@ -96,7 +96,7 @@ var(
 /*4:*/
 
 
-//line mfind.w:51
+//line mfind.w:48
 
 options string
 values[]string
@@ -128,15 +128,12 @@ debug glog.Level= 1
 )
 
 func main(){
-defer glog.Flush()
-glog.V(debug).Infoln("main")
-defer glog.V(debug).Infoln("main is done")
 
 
 /*5:*/
 
 
-//line mfind.w:59
+//line mfind.w:56
 
 {
 flag.BoolVar(&help,"help",false,"print the help")
@@ -156,6 +153,9 @@ if help{
 flag.Usage()
 return
 }
+defer glog.Flush()
+glog.V(debug).Infoln("main")
+defer glog.V(debug).Infoln("main is done")
 if len(size)!=0{
 if len(size)> 1{
 fmt.Fprint(os.Stderr,"wrong search query size: %s",size)
@@ -183,7 +183,7 @@ values= flag.Args()
 /*:5*/
 
 
-//line mfind.w:34
+//line mfind.w:31
 
 gdbin:=os.NewFile(uintptr(3),"input")
 gdbout:=os.NewFile(uintptr(4),"output")
@@ -211,7 +211,7 @@ return
 /*:8*/
 
 
-//line mfind.w:40
+//line mfind.w:37
 
 
 
@@ -307,7 +307,7 @@ v= ""
 /*:9*/
 
 
-//line mfind.w:41
+//line mfind.w:38
 
 }
 

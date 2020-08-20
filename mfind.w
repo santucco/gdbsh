@@ -28,9 +28,6 @@ var (
 )@#
 
 func main() {
-	defer glog.Flush()
-	glog.V(debug).Infoln("main")
-	defer glog.V(debug).Infoln("main is done")
 	@<Обработать аргументы командной строки@>
 	gdbin:=os.NewFile(uintptr(3), "input")
 	gdbout:=os.NewFile(uintptr(4), "output")
@@ -75,6 +72,9 @@ num		uint
 		flag.Usage()
 		return
 	}
+	defer glog.Flush()
+	glog.V(debug).Infoln("main")
+	defer glog.V(debug).Infoln("main is done")
 	if len(size)!=0 {
 		if len(size)>1 {
 			fmt.Fprint(os.Stderr, "wrong search query size: %s", size)

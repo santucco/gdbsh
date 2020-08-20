@@ -676,11 +676,10 @@ func (this *internal)Wait() error {
 	}
 }
 
-
-
 @
 @<Импортируемые пакеты@>=
 "github.com/golang/glog"
+"flag"
 
 @
 @<Глобальные переменные@>=
@@ -689,6 +688,7 @@ debug glog.Level=0
 @
 @<Подготовить трассировку@>=
 {
+	flag.Parse()
 	glog.V(debug).Infoln("main")
 	defer glog.V(debug).Infoln("main is done")
 	defer glog.Flush()

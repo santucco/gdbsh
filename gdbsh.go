@@ -105,9 +105,10 @@ import(
 /*39:*/
 
 
-//line gdbsh.w:682
+//line gdbsh.w:680
 
 "github.com/golang/glog"
+"flag"
 
 
 
@@ -312,7 +313,7 @@ cmds= map[string]string{
 /*40:*/
 
 
-//line gdbsh.w:686
+//line gdbsh.w:685
 
 debug glog.Level= 0
 
@@ -400,9 +401,10 @@ return
 /*41:*/
 
 
-//line gdbsh.w:690
+//line gdbsh.w:689
 
 {
+flag.Parse()
 glog.V(debug).Infoln("main")
 defer glog.V(debug).Infoln("main is done")
 defer glog.Flush()
@@ -1817,8 +1819,6 @@ continue
 
 
 
-
-
 /*:38*/
 
 
@@ -1919,8 +1919,6 @@ io.WriteString(gdbin,s+"\n")
 continue
 }
 }
-
-
 
 
 

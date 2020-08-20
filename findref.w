@@ -28,9 +28,6 @@ var (
 )@#
 
 func main() {
-	defer glog.Flush()
-	glog.V(debug).Infoln("main")
-	defer glog.V(debug).Infoln("main is done")
 	@<Обработать аргументы командной строки@>
 	gdbin:=os.NewFile(uintptr(3), "input")
 	gdbout:=os.NewFile(uintptr(4), "output")
@@ -71,6 +68,9 @@ help		bool
 		flag.Usage()
 		return
 	}
+	defer glog.Flush()
+	glog.V(debug).Infoln("main")
+	defer glog.V(debug).Infoln("main is done")
 	glog.V(debug).Infof("args: %#v", flag.Args())
 	if len(flag.Args())>0 {
 		instances=flag.Args()
