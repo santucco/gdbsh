@@ -290,12 +290,23 @@ go func (){
 	prev:=""
 	@<Захватить ввод@>
 	@<Создать экземпляр |readline| @>
+	loop:
 	for	{
 		s, err:=rl.Readline()
+		switch err {
+		case nil:
+		case readline.ErrInterrupt :
+			glog.V(debug).Infof("readline error %s", err)
+			togdbch<-"-exec-interrupt"
+			continue
+		case io.EOF:
+			glog.V(debug).Infof("readline error %s", err)
+			break loop
+		default:
+			glog.V(debug).Infof("readline unexpected error %d", err)
+
+		}
 		@<Разрешить ввод@>
-        if err!=nil { // io.EOF
-                break
-        }
 		glog.V(debug).Infof("entered text: '%s'", s)
 		if len(s)==0 {
 			s=prev
@@ -529,12 +540,16 @@ func FieldsFunc(s string, f func(rune) bool) []string {
 				case syscall.SIGPIPE:
 					glog.V(debug).Infof("signal SIGPIPE(%#v)", s)
 					signal.Ignore(s)
-				case os.Interrupt:
+				case syscall.SIGCHLD:
+					glog.V(debug).Infof("signal SIGPIPE(%#v)", s)
+					signal.Ignore(s)
+				case os.Interrupt, syscall.SIGTERM:
 					glog.V(debug).Infof("signal SIGINT(%#v)", s)
 					signal.Ignore(s)
 					togdbch<-"-exec-interrupt"
 				default:
 					glog.V(debug).Infof("signal %#v", s)
+					signal.Ignore(s)
 			}
 		}
 	} ()
