@@ -147,6 +147,7 @@ ackch		=make(chan bool)
 @<Читать команды из  |stdin|, посылать их в \.{GDB}, обрабатывать результаты@>=
 {
 	@<Запустить параллельную обработку вывода из \.{GDB}@>
+	@<Запустить параллельную обработку вывода ошибок из \.{GDB}@>
 	@<Запустить параллельную обработку ввода из |stdin|@>
 	rp:=strings.NewReplacer("\\n", "\n", "\\t", "\t", "\\\"", "\"")
 	devnull,_:=os.Open(os.DevNull)
@@ -281,6 +282,15 @@ go func(){
 		fromgdbch<-s
 	}
 	close(fromgdbch)
+}()
+
+@
+@<Запустить параллельную обработку вывода ошибок из \.{GDB}@>=
+go func(){
+	gdbr:=bufio.NewReader(gdberr)
+	for s, err:=gdbr.ReadString('\n'); err==nil; s, err=gdbr.ReadString('\n') {
+		fmt.Fprintf(os.Stderr, "%s", s)
+	}
 }()
 
 @ Пакет |readline| осуществляет поддержку получения ввода с клавиатуры, историю и автозавершение команд.
